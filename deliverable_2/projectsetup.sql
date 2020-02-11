@@ -1,4 +1,4 @@
--- DROP TABLE orders, dine_in_orders, delivery_orders, staff, waiter, delivery_guy, chef, platform, customer, dish, reservation, contain, cooked_by, served_by
+-- DROP TABLE orders, dine_in_orders, delivery_orders, staff, waiter, delivery_guy, chef, platform, customer, dish, reservation, contain, cooked_by, served_by;
 
 CREATE TABLE customer
 (
@@ -11,7 +11,7 @@ CREATE TABLE customer
 CREATE TABLE staff
 (
    sid INTEGER NOT NULL
-  ,sname VARCHAR(12)
+  ,sname VARCHAR(40)
   ,working_schdule VARCHAR(12)
   ,salary FLOAT8
   ,PRIMARY KEY(sid)
@@ -48,6 +48,7 @@ CREATE TABLE delivery_orders
   ,pname VARCHAR(30)
   ,delivery_fee FLOAT8
   ,PRIMARY KEY(order_number)
+  ,FOREIGN KEY(order_number) REFERENCES orders(order_number)
   ,FOREIGN KEY(sid) REFERENCES staff(sid)
   ,FOREIGN KEY(pname) REFERENCES platform(pname)
 ); 
@@ -79,7 +80,7 @@ CREATE TABLE chef
 
 CREATE TABLE dish
 (
-   dish_name VARCHAR(30) NOT NULL
+   dish_name VARCHAR(50) NOT NULL
   ,price FLOAT8
   ,PRIMARY KEY(dish_name)
 );
