@@ -1,0 +1,177 @@
+\d orders
+             Table "cs421g62.orders"
+    Column    |         Type          | Modifiers 
+--------------+-----------------------+-----------
+ order_number | character varying(30) | not null
+ tips         | double precision      | 
+Indexes:
+    "orders_pkey" PRIMARY KEY, btree (order_number)
+Referenced by:
+    TABLE "contain" CONSTRAINT "contain_order_number_fkey" FOREIGN KEY (order_number) REFERENCES orders(order_number)
+    TABLE "dine_in_orders" CONSTRAINT "dine_in_orders_order_number_fkey" FOREIGN KEY (order_number) REFERENCES orders(order_number)
+    TABLE "served_by" CONSTRAINT "served_by_order_number_fkey" FOREIGN KEY (order_number) REFERENCES orders(order_number)
+
+\d chef
+               Table "cs421g62.chef"
+    Column     |         Type          | Modifiers 
+---------------+-----------------------+-----------
+ proficiency   | character varying(12) | 
+ cooking_style | character varying(12) | 
+ sid           | integer               | not null
+Indexes:
+    "chef_pkey" PRIMARY KEY, btree (sid)
+Foreign-key constraints:
+    "chef_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+Referenced by:
+    TABLE "cooked_by" CONSTRAINT "cooked_by_sid_fkey" FOREIGN KEY (sid) REFERENCES chef(sid)
+
+\d contain
+             Table "cs421g62.contain"
+    Column    |         Type          | Modifiers 
+--------------+-----------------------+-----------
+ order_number | character varying(20) | not null
+ dish_name    | character varying(30) | not null
+ quantity     | integer               | 
+Indexes:
+    "contain_pkey" PRIMARY KEY, btree (order_number, dish_name)
+Foreign-key constraints:
+    "contain_dish_name_fkey" FOREIGN KEY (dish_name) REFERENCES dish(dish_name)
+    "contain_order_number_f
+
+\d cooked_by
+          Table "cs421g62.cooked_by"
+  Column   |         Type          | Modifiers 
+-----------+-----------------------+-----------
+ dish_name | character varying(30) | not null
+ sid       | integer               | not null
+Indexes:
+    "cooked_by_pkey" PRIMARY KEY, btree (dish_name, sid)
+Foreign-key constraints:
+    "cooked_by_dish_name_fkey" FOREIGN KEY (dish_name) REFERENCES dish(dish_name)
+    "cooked_by_sid_fkey" FOREIGN KEY (sid) REFERENCES chef(sid)
+
+\d customer 
+             Table "cs421g62.customer"
+    Column    |          Type          | Modifiers 
+--------------+------------------------+-----------
+ phone_number | character varying(15)  | not null
+ canme        | character varying(40)  | 
+ address      | character varying(100) | 
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (phone_number)
+Referenced by:
+    TABLE "dine_in_orders" CONSTRAINT "dine_in_orders_phone_number_fkey" FOREIGN KEY (phone_number) REFERENCES customer(phone_number)
+    TABLE "reservation" CONSTRAINT "reservation_phone_number_fkey" FOREIGN KEY (phone_number) REFERENCES customer(phone_number)
+
+\d delivery_guy
+            Table "cs421g62.delivery_guy"
+     Column      |         Type          | Modifiers 
+-----------------+-----------------------+-----------
+ delivery_method | character varying(12) | 
+ phone_number    | character varying(15) | 
+ sid             | integer               | not null
+Indexes:
+    "delivery_guy_pkey" PRIMARY KEY, btree (sid)
+Foreign-key constraints:
+    "delivery_guy_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+
+\d delivery_orders
+         Table "cs421g62.delivery_orders"
+    Column    |         Type          | Modifiers 
+--------------+-----------------------+-----------
+ order_number | character varying(30) | not null
+ phone_number | character varying(15) | not null
+ sid          | integer               | not null
+ pname        | character varying(30) | 
+ delivery_fee | double precision      | 
+Indexes:
+    "delivery_orders_pkey" PRIMARY KEY, btree (order_number)
+Foreign-key constraints:
+    "delivery_orders_pname_fkey" FOREIGN KEY (pname) REFERENCES platform(pname)
+    "delivery_orders_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+
+\d dine_in_orders 
+         Table "cs421g62.dine_in_orders"
+    Column    |         Type          | Modifiers 
+--------------+-----------------------+-----------
+ order_number | character varying(30) | not null
+ phone_number | character varying(15) | not null
+Indexes:
+    "dine_in_orders_pkey" PRIMARY KEY, btree (order_number)
+Foreign-key constraints:
+    "dine_in_orders_order_number_fkey" FOREIGN KEY (order_number) REFERENCES orders(order_number)
+    "dine_in_orders_phone_number_fkey" FOREIGN KEY (phone_number) REFERENCES customer(phone_number)
+
+\d dish          
+             Table "cs421g62.dish"
+  Column   |         Type          | Modifiers 
+-----------+-----------------------+-----------
+ dish_name | character varying(30) | not null
+ price     | double precision      | 
+Indexes:
+    "dish_pkey" PRIMARY KEY, btree (dish_name)
+Referenced by:
+    TABLE "contain" CONSTRAINT "contain_dish_name_fkey" FOREIGN KEY (dish_name) REFERENCES dish(dish_name)
+    TABLE "cooked_by" CONSTRAINT "cooked_by_dish_name_fkey" FOREIGN KEY (dish_name) REFERENCES dish(dish_name)
+
+\d platform
+          Table "cs421g62.platform"
+ Column |          Type          | Modifiers 
+--------+------------------------+-----------
+ pname  | character varying(30)  | not null
+ url    | character varying(100) | 
+Indexes:
+    "platform_pkey" PRIMARY KEY, btree (pname)
+Referenced by:
+    TABLE "delivery_orders" CONSTRAINT "delivery_orders_pname_fkey" FOREIGN KEY (pname) REFERENCES platform(pname)
+
+\d reservation
+           Table "cs421g62.reservation"
+    Column    |         Type          | Modifiers 
+--------------+-----------------------+-----------
+ rdate        | date                  | not null
+ phone_number | character varying(15) | not null
+ timeslot     | time with time zone   | 
+Indexes:
+    "reservation_pkey" PRIMARY KEY, btree (rdate, phone_number)
+Foreign-key constraints:
+    "reservation_phone_number_fkey" FOREIGN KEY (phone_number) REFERENCES customer(phone_number)
+
+\d served_by
+            Table "cs421g62.served_by"
+    Column    |         Type          | Modifiers 
+--------------+-----------------------+-----------
+ order_number | character varying(20) | not null
+ sid          | integer               | not null
+Indexes:
+    "served_by_pkey" PRIMARY KEY, btree (order_number, sid)
+Foreign-key constraints:
+    "served_by_order_number_fkey" FOREIGN KEY (order_number) REFERENCES orders(order_number)
+    "served_by_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+
+\d staff    
+               Table "cs421g62.staff"
+     Column      |         Type          | Modifiers 
+-----------------+-----------------------+-----------
+ sid             | integer               | not null
+ sname           | character varying(12) | 
+ working_schdule | character varying(12) | 
+ salary          | double precision      | 
+Indexes:
+    "staff_pkey" PRIMARY KEY, btree (sid)
+Referenced by:
+    TABLE "chef" CONSTRAINT "chef_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+    TABLE "delivery_guy" CONSTRAINT "delivery_guy_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+    TABLE "delivery_orders" CONSTRAINT "delivery_orders_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+    TABLE "served_by" CONSTRAINT "served_by_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+    TABLE "waiter" CONSTRAINT "waiter_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
+
+\d waiter
+   Table "cs421g62.waiter"
+ Column |  Type   | Modifiers 
+--------+---------+-----------
+ sid    | integer | not null
+Indexes:
+    "waiter_pkey" PRIMARY KEY, btree (sid)
+Foreign-key constraints:
+    "waiter_sid_fkey" FOREIGN KEY (sid) REFERENCES staff(sid)
