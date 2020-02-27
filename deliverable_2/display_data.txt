@@ -1,0 +1,165 @@
+question 3:
+
+cs421=> INSERT INTO reservation VALUES( '2020-01-29','514-123-8900','19:30');
+INSERT 0 1
+cs421=> INSERT INTO reservation VALUES( '2020-01-30','514-421-1768','16:30');
+INSERT 0 1
+cs421=> INSERT INTO reservation VALUES( '2020-01-21','514-141-5854','17:25');
+INSERT 0 1
+cs421=> INSERT INTO reservation VALUES( '2020-01-22','514-133-1567','16:45');
+INSERT 0 1
+cs421=> INSERT INTO reservation VALUES( '2020-01-23','514-140-1264','16:10');
+INSERT 0 1
+cs421=> SELECT * FROM reservation;
+   rdate    | phone_number | timeslot
+------------+--------------+----------
+ 2020-01-29 | 514-123-8900 | 19:30:00
+ 2020-01-30 | 514-421-1768 | 16:30:00
+ 2020-01-21 | 514-141-5854 | 17:25:00
+ 2020-01-22 | 514-133-1567 | 16:45:00
+ 2020-01-23 | 514-140-1264 | 16:10:00
+(5 rows)
+
+------------------------------------------------------------------------------------
+
+question 4:
+
+cs421=> SELECT * FROM staff LIMIT 5;
+ sid |     sname      | working_schdule | salary 
+-----+----------------+-----------------+--------
+   1 | Samuel Randall | morning         |     12
+   2 | Shala Tang     | morning         |     12
+   3 | Macie Finely   | afternoon       |     12
+   4 | Jeffrey Frye   | afternoon       |     12
+   5 | Anna Black     | evening         |     12
+(5 rows)
+
+cs421=> SELECT * FROM customer LIMIT 5;
+ phone_number |     canme      |       address        
+--------------+----------------+----------------------
+ 514-123-8900 | Nimrah Carter  | 190  Lynden Road
+ 514-421-1768 | Tiana House    | 1528  Halsey Avenue
+ 514-141-5854 | Armaan Gibbons | 3569  Lockhart Drive
+ 514-133-1567 | Jevan Hope     | 3020  rue Parc
+ 514-140-1264 | Nettie Cline   | 2318  Royal Avenue
+(5 rows)
+
+cs421=> SELECT * FROM platform LIMIT 5;
+      pname       |              url               
+------------------+--------------------------------
+ Uber Eats        | https://www.ubereats.com/en-CA
+ Skip The Dishes  | https://www.skipthedishes.com/
+ Foodora          | https://www.foodora.ca/
+ Food Highway     | https://www.foodhwy.com/
+ Fantuan Delivery | https://en.fantuan.ca/
+(5 rows)
+
+cs421=> SELECT * FROM orders LIMIT 5;
+ order_number | tips 
+--------------+------
+ 001          |  2.1
+ 002          |  1.5
+ 003          |  1.2
+ 004          |    3
+ 005          |  2.3
+(5 rows)
+
+cs421=> SELECT * FROM dine_in_orders LIMIT 5;
+ order_number | phone_number 
+--------------+--------------
+ 001          | 514-123-8900
+ 002          | 514-421-1768
+ 003          | 514-141-5854
+ 004          | 514-133-1567
+ 005          | 514-140-1264
+(5 rows)
+
+cs421=> SELECT * FROM delivery_orders LIMIT 5;
+ order_number | phone_number | sid |      pname      | delivery_fee 
+--------------+--------------+-----+-----------------+--------------
+ 006          | 514-202-1544 |   7 | Uber Eats       |            5
+ 007          | 514-303-2334 |   9 | Skip The Dishes |            3
+ 008          | 514-404-2154 |  10 | Foodora         |          2.5
+ 009          | 514-273-3594 |   9 | Food Highway    |          2.7
+ 014          | 514-273-3594 |  10 | Food Highway    |          2.7
+(5 rows)
+
+cs421=> SELECT * FROM waiter LIMIT 5;
+ sid 
+-----
+   1
+   2
+   3
+   4
+   5
+(5 rows)
+
+cs421=> SELECT * FROM delivery_guy LIMIT 5;
+ delivery_method | phone_number | sid 
+-----------------+--------------+-----
+ Car             | 514-999-9999 |   7
+ Bike            | 514-888-8888 |   8
+ On foot         | 514-777-7777 |   9
+ Car             | 514-666-6666 |  10
+ Bike            | 514-555-5555 |  11
+(5 rows)
+
+cs421=> SELECT * FROM chef LIMIT 5;
+ proficiency | cooking_style | sid 
+-------------+---------------+-----
+           2 | Cutting       |  13
+           3 | Steaming      |  14
+           4 | Braising      |  15
+           4 | Braising      |  16
+           5 | Stir-frying   |  17
+(5 rows)
+
+cs421=> SELECT * FROM dish LIMIT 5;
+            dish_name             | price 
+----------------------------------+-------
+ Tenderized Truffles & Yak        | 50.99
+ Sautéed Dark Beer Pork           |  28.9
+ Tenderized Parmesan Lobster      |  99.9
+ Simmered Peas & Mushroom Oysters |  66.6
+ Breaded Cucumber & Lime Pizza    |  19.9
+(5 rows)
+
+cs421=> SELECT * FROM reservation LIMIT 5;
+   rdate    | phone_number | timeslot 
+------------+--------------+----------
+ 2020-01-29 | 514-123-8900 | 19:30:00
+ 2020-01-30 | 514-421-1768 | 16:30:00
+ 2020-01-21 | 514-141-5854 | 17:25:00
+ 2020-01-22 | 514-133-1567 | 16:45:00
+ 2020-01-23 | 514-140-1264 | 16:10:00
+(5 rows)
+
+cs421=> SELECT * FROM contain LIMIT 5;
+ order_number |         dish_name         | quantity 
+--------------+---------------------------+----------
+ 001          | Tenderized Truffles & Yak |        2
+ 001          | Guoyou pork               |        1
+ 001          | General Tsos Chicken      |        2
+ 002          | boiled spicy fish         |        2
+ 002          | beef pho                  |        2
+(5 rows)
+
+cs421=> SELECT * FROM cooked_by LIMIT 5;
+            dish_name             | sid 
+----------------------------------+-----
+ Tenderized Truffles & Yak        |  13
+ Sautéed Dark Beer Pork           |  14
+ Tenderized Parmesan Lobster      |  15
+ Simmered Peas & Mushroom Oysters |  16
+ Breaded Cucumber & Lime Pizza    |  17
+(5 rows)
+
+cs421=> SELECT * FROM served_by LIMIT 5;
+ order_number | sid 
+--------------+-----
+ 001          |   1
+ 002          |   2
+ 003          |   3
+ 004          |   4
+ 005          |   5
+(5 rows)

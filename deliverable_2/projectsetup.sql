@@ -1,3 +1,8 @@
+/**
+ * Group 62:
+ * This file contains all the create table statements
+ */
+
 -- DROP TABLE orders, dine_in_orders, delivery_orders, staff, waiter, delivery_guy, chef, platform, customer, dish, reservation, contain, cooked_by, served_by;
 
 CREATE TABLE customer
@@ -71,7 +76,7 @@ CREATE TABLE delivery_guy
 
 CREATE TABLE chef
 (
-   proficiency VARCHAR(12)
+   proficiency INTEGER
   ,cooking_style VARCHAR(12)
   ,sid INTEGER NOT NULL
   ,FOREIGN KEY(sid) REFERENCES staff(sid)
@@ -87,9 +92,9 @@ CREATE TABLE dish
 
 CREATE TABLE reservation
 (  
-   rdate date
+   rdate DATE
   ,phone_number VARCHAR(15)
-  ,timeslot time with time zone
+  ,timeslot TIME
   ,PRIMARY KEY(rdate, phone_number)
   ,FOREIGN KEY(phone_number) REFERENCES customer(phone_number)
 );
@@ -97,7 +102,7 @@ CREATE TABLE reservation
 CREATE TABLE contain
 (  
    order_number VARCHAR(20)
-  ,dish_name VARCHAR(30)
+  ,dish_name VARCHAR(50)
   ,quantity INTEGER
   ,PRIMARY KEY(order_number, dish_name)
   ,FOREIGN KEY(order_number) REFERENCES orders(order_number)
@@ -106,7 +111,7 @@ CREATE TABLE contain
 
 CREATE TABLE cooked_by
 (
-   dish_name VARCHAR(30)
+   dish_name VARCHAR(50)
   ,sid INTEGER
   ,PRIMARY KEY(dish_name, sid)
   ,FOREIGN KEY(sid) REFERENCES chef(sid)
