@@ -1,0 +1,50 @@
+total_revenue 
+---------------
+       1198.51
+(1 row)
+-------------------------------------------------------------------------------------------------------
+
+    sname     | proficiency | cooking_style | sid 
+--------------+-------------+---------------+-----
+ Lacie Barr   |           2 | Cutting       |  13
+ Isla Greer   |           3 | Steaming      |  14
+ Meadow Moran |           4 | Braising      |  15
+ Steve Marwan |           4 | Braising      |  16
+ Melanie Hill |           5 | Stir-frying   |  18
+(5 rows)
+
+
+
+ order_number | delivery_guy_name | delivery_guy_sid | delivery_guy_phone |  cus_name   |  cus_phone   |       cus_address        
+--------------+-------------------+------------------+--------------------+-------------+--------------+--------------------------
+ 006          | Annie Carr        |                7 | 514-999-9999       | Ava Pollard | 514-202-1544 | 1120  th Avenue
+ 007          | Jodie Stuart      |                9 | 514-777-7777       | Teegan Liu  | 514-303-2334 | 3417  Brew Creek Rd
+ 008          | Cassie Noble      |               10 | 514-666-6666       | Jing Guo    | 514-404-2154 | 283  Jasper Avenue
+ 009          | Jodie Stuart      |                9 | 514-777-7777       | Rong Huang  | 514-273-3594 | 3242  Boulevard Cremazie
+ 014          | Cassie Noble      |               10 | 514-666-6666       | Rong Huang  | 514-273-3594 | 3242  Boulevard Cremazie
+ 015          | Cara Allenr       |                8 | 514-888-8888       | Teegan Liu  | 514-303-2334 | 3417  Brew Creek Rd
+(6 rows)
+
+     canme      | phone_number |   rdate    | timeslot 
+----------------+--------------+------------+----------
+ Ava Pollard    | 514-202-1544 | 2020-01-15 | 18:20:00
+ Armaan Gibbons | 514-141-5854 | 2020-01-21 | 17:25:00
+ Jing Guo       | 514-404-2154 | 2020-01-22 | 12:30:00
+ Jevan Hope     | 514-133-1567 | 2020-01-22 | 16:45:00
+ Rong Huang     | 514-273-3594 | 2020-01-23 | 11:45:00
+ Nettie Cline   | 514-140-1264 | 2020-01-23 | 16:10:00
+ Tiana House    | 514-421-1768 | 2020-01-25 | 12:20:00
+ Nimrah Carter  | 514-123-8900 | 2020-01-29 | 19:30:00
+ Tiana House    | 514-421-1768 | 2020-01-30 | 16:30:00
+ Teegan Liu     | 514-303-2334 | 2020-02-19 | 18:10:00
+(10 rows)
+
+
+    sname     | proficiency | cooking_style 
+--------------+-------------+---------------
+ Lacie Barr   |           2 | Cutting
+ Isla Greer   |           3 | Steaming
+ Meadow Moran |           4 | Braising
+ Steve Marwan |           4 | Braising
+ Melanie Hill |           5 | Stir-frying
+(5 rows)

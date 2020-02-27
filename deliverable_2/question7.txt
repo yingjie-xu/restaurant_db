@@ -1,0 +1,40 @@
+    sname     | sid | proficiency | cooking_style 
+--------------+-----+-------------+---------------
+ Lacie Barr   |  13 |           2 | Cutting
+ Isla Greer   |  14 |           3 | Steaming
+ Meadow Moran |  15 |           4 | Braising
+ Steve Marwan |  16 |           4 | Braising
+ Melanie Hill |  18 |           5 | Stir-frying
+(5 rows)
+
+
+UPDATE best_chef 
+SET proficiency = 5
+WHERE sid = 5;
+
+ERROR:  cannot update view "best_chef"
+DETAIL:  Views that do not select from a single table or view are not automatically updatable.
+HINT:  To enable updating the view, provide an INSTEAD OF UPDATE trigger or an unconditional ON UPDATE DO INSTEAD rule.
+SQL state: 55000
+
+
+
+UPDATE delivery_order_info
+SET cus_address = '1430 rue citycouncillors'
+WHERE order_number = '006';
+
+ order_number | delivery_guy_name | delivery_guy_sid | delivery_guy_phone |  cus_name   |  cus_phone   |       cus_address        
+--------------+-------------------+------------------+--------------------+-------------+--------------+--------------------------
+ 006          | Annie Carr        |                7 | 514-999-9999       | Ava Pollard | 514-202-1544 | 1120  th Avenue
+ 007          | Jodie Stuart      |                9 | 514-777-7777       | Teegan Liu  | 514-303-2334 | 3417  Brew Creek Rd
+ 008          | Cassie Noble      |               10 | 514-666-6666       | Jing Guo    | 514-404-2154 | 283  Jasper Avenue
+ 009          | Jodie Stuart      |                9 | 514-777-7777       | Rong Huang  | 514-273-3594 | 3242  Boulevard Cremazie
+ 014          | Cassie Noble      |               10 | 514-666-6666       | Rong Huang  | 514-273-3594 | 3242  Boulevard Cremazie
+ 015          | Cara Allenr       |                8 | 514-888-8888       | Teegan Liu  | 514-303-2334 | 3417  Brew Creek Rd
+(6 rows)
+
+
+ERROR:  cannot update view "delivery_order_info"
+DETAIL:  Views that do not select from a single table or view are not automatically updatable.
+HINT:  To enable updating the view, provide an INSTEAD OF UPDATE trigger or an unconditional ON UPDATE DO INSTEAD rule.
+SQL state: 55000

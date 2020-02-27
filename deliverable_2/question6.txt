@@ -1,0 +1,212 @@
+UPDATE staff
+SET salary = salary+1
+WHERE sid IN
+(SELECT S.sid FROM staff S JOIN
+(SELECT chef.sid, chef.proficiency,chef.cooking_style FROM chef
+INNER JOIN
+((SELECT t1.cooking_style, MAX(t1.proficiency) AS maxProficiency FROM
+  (SELECT DISTINCT S.sname, S.sid, C.proficiency, C.cooking_style FROM staff S
+  JOIN
+  chef C ON C.sid = S.sid)t1
+GROUP BY t1.cooking_style)) t2
+ON chef.proficiency = t2.maxProficiency AND t2.cooking_style = chef.cooking_style)t3
+ON S.sid = t3.sid)
+
+SELECT * FROM staff;
+
+-- This is the table before raise the salary for best chef
+
+ sid |      sname       | working_schdule | salary 
+-----+------------------+-----------------+--------
+  18 | Melanie Hill     | evening         |     15 ->to modify
+  17 | Luis Nash        | evening         |     15
+  16 | Steve Marwan     | afternoon       |     15 ->to modify
+  15 | Meadow Moran     | afternoon       |     15 ->to modify
+  14 | Isla Greer       | morning         |     15 ->to modify
+  13 | Lacie Barr       | morning         |     15 ->to modify
+  12 | Ammie Summers    | evening         |     13
+  11 | Lachlan Lawrence | evening         |     13
+  10 | Cassie Noble     | afternoon       |     13
+   9 | Jodie Stuart     | afternoon       |     13
+   8 | Cara Allenr      | morning         |     13
+   7 | Annie Carr       | evening         |     13
+   6 | Hugo Turner      | evening         |     12
+   5 | Anna Black       | evening         |     12
+   4 | Jeffrey Frye     | afternoon       |     12
+   3 | Macie Finely     | afternoon       |     12
+   2 | Shala Tang       | morning         |     12
+   1 | Samuel Randall   | morning         |     12
+(18 rows)
+
+
+-- This is the table after raise the salary for best chef
+
+ sid |      sname       | working_schdule | salary 
+-----+------------------+-----------------+--------
+  18 | Melanie Hill     | evening         |     16 ->modified
+  17 | Luis Nash        | evening         |     15
+  16 | Steve Marwan     | afternoon       |     16 ->modified
+  15 | Meadow Moran     | afternoon       |     16 ->modified
+  14 | Isla Greer       | morning         |     16 ->modified
+  13 | Lacie Barr       | morning         |     16 ->modified
+  12 | Ammie Summers    | evening         |     13
+  11 | Lachlan Lawrence | evening         |     13
+  10 | Cassie Noble     | afternoon       |     13
+   9 | Jodie Stuart     | afternoon       |     13
+   8 | Cara Allenr      | evening         |     13
+   7 | Annie Carr       | evening         |     13
+   6 | Hugo Turner      | evening         |     12
+   5 | Anna Black       | evening         |     12
+   4 | Jeffrey Frye     | afternoon       |     12
+   3 | Macie Finely     | afternoon       |     12
+   2 | Shala Tang       | morning         |     12
+   1 | Samuel Randall   | morning         |     12
+(18 rows)
+
+
+----------------------------------------------------------------
+UPDATE Customer
+SET address='3470 Rue Stanley'
+WHERE canme='Armaan Gibbons';
+
+SELECT address FROM Customer WHERE canme='Armaan Gibbons';
+
+-- This is the address before he/she change his delivery address
+
+     address      
+------------------
+ 3470 Rue Hilmton
+(1 row)
+
+-- This is the address after he/she change his delivery address
+
+     address      
+------------------
+ 3470 Rue Stanley
+(1 row)
+
+
+------------------------------------------------------------------
+UPDATE staff
+SET working_schdule = 'evening' 
+WHERE sid = 8;
+
+SELECT *
+FROM staff
+ORDER BY sid;
+
+
+-- A staff proposed to change his/her working schedule
+-- This is the table before updating the working schedule
+ sid |      sname       | working_schdule | salary 
+-----+------------------+-----------------+--------
+   1 | Samuel Randall   | morning         |     12
+   2 | Shala Tang       | morning         |     12
+   3 | Macie Finely     | afternoon       |     12
+   4 | Jeffrey Frye     | afternoon       |     12
+   5 | Anna Black       | evening         |     12
+   6 | Hugo Turner      | evening         |     12
+   7 | Annie Carr       | evening         |     13
+   8 | Cara Allenr      | morning         |     13 --> to modify
+   9 | Jodie Stuart     | afternoon       |     13
+  10 | Cassie Noble     | afternoon       |     13
+  11 | Lachlan Lawrence | evening         |     13
+  12 | Ammie Summers    | evening         |     13
+  13 | Lacie Barr       | morning         |     16
+  14 | Isla Greer       | morning         |     16
+  15 | Meadow Moran     | afternoon       |     16
+  16 | Steve Marwan     | afternoon       |     16
+  17 | Luis Nash        | evening         |     15
+  18 | Melanie Hill     | evening         |     16
+(18 rows)
+
+
+-- This is the table after updating the working schedule
+ sid |      sname       | working_schdule | salary 
+-----+------------------+-----------------+--------
+   1 | Samuel Randall   | morning         |     12
+   2 | Shala Tang       | morning         |     12
+   3 | Macie Finely     | afternoon       |     12
+   4 | Jeffrey Frye     | afternoon       |     12
+   5 | Anna Black       | evening         |     12
+   6 | Hugo Turner      | evening         |     12
+   7 | Annie Carr       | evening         |     13
+   8 | Cara Allenr      | evening         |     13 --> modified
+   9 | Jodie Stuart     | afternoon       |     13
+  10 | Cassie Noble     | afternoon       |     13
+  11 | Lachlan Lawrence | evening         |     13
+  12 | Ammie Summers    | evening         |     13
+  13 | Lacie Barr       | morning         |     16
+  14 | Isla Greer       | morning         |     16
+  15 | Meadow Moran     | afternoon       |     16
+  16 | Steve Marwan     | afternoon       |     16
+  17 | Luis Nash        | evening         |     15
+  18 | Melanie Hill     | evening         |     16
+(18 rows)
+
+
+------------------------------------------------------------------
+UPDATE dish 
+SET price = price * 1.1
+WHERE dish_name IN 
+(SELECT dish_name FROM contain GROUP BY dish_name
+HAVING COUNT(*) = (
+SELECT MAX(y.dcount) FROM 
+(SELECT dish_name ,COUNT(*) AS dcount FROM contain GROUP BY dish_name) y));
+
+SELECT * FROM dish;
+
+-- This is the table before we raise the price for bestseller dishes
+
+              dish_name              | price 
+-------------------------------------+-------
+ Sautéed Dark Beer Pork              |  28.9
+ Simmered Peas & Mushroom Oysters    |  66.6
+ Breaded Cucumber & Lime Pizza       |  19.9
+ Roasted Almonds & Avocado Bread     |  28.9
+ Rum and Praline Delight             |  17.9
+ Chestnut and Nutmeg Gingerbread     |  25.9
+ Ginger Candy                        |  5.99
+ Cranberry Genoise                   |    27
+ Fire-Roasted Basil & Mint Yak       |  32.3
+ Simmered Mountain Rabbit            |  22.5
+ Pressure-Fried Vegetables & Frog    |  31.5
+ Sautéed Orange & Mustard Vegetables |  26.9
+ Barbecued Mustard & Garlic Calzone  |    25
+ boiled spicy fish                   | 30.99
+ Guoyou pork                         | 17.99
+ Sweet and sour pork ribs            |  14.5
+ beef pho                            |  10.5
+ General Tsos Chicken                |  15.5
+ Tenderized Truffles & Yak           | 50.99 -> to modify
+ Tenderized Parmesan Lobster         |  99.9 -> to modify
+(20 rows)
+
+-- This is the table after we raise the price for bestseller dishes
+
+              dish_name              | price  
+-------------------------------------+--------
+ Sautéed Dark Beer Pork              |   28.9
+ Simmered Peas & Mushroom Oysters    |   66.6
+ Breaded Cucumber & Lime Pizza       |   19.9
+ Roasted Almonds & Avocado Bread     |   28.9
+ Rum and Praline Delight             |   17.9
+ Chestnut and Nutmeg Gingerbread     |   25.9
+ Ginger Candy                        |   5.99
+ Cranberry Genoise                   |     27
+ Fire-Roasted Basil & Mint Yak       |   32.3
+ Simmered Mountain Rabbit            |   22.5
+ Pressure-Fried Vegetables & Frog    |   31.5
+ Sautéed Orange & Mustard Vegetables |   26.9
+ Barbecued Mustard & Garlic Calzone  |     25
+ boiled spicy fish                   |  30.99
+ Guoyou pork                         |  17.99
+ Sweet and sour pork ribs            |   14.5
+ beef pho                            |   10.5
+ General Tsos Chicken                |   15.5
+ Tenderized Truffles & Yak           | 56.089 -> modified
+ Tenderized Parmesan Lobster         | 109.89 -> modified
+(20 rows)
+
+
+
