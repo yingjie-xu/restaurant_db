@@ -4,6 +4,12 @@ total_revenue
 (1 row)
 -------------------------------------------------------------------------------------------------------
 
+          dish_name          | dcount 
+-----------------------------+--------
+ Tenderized Parmesan Lobster |      4
+ Tenderized Truffles & Yak   |      4
+(2 rows)
+
     sname     | proficiency | cooking_style | sid 
 --------------+-------------+---------------+-----
  Lacie Barr   |           2 | Cutting       |  13
