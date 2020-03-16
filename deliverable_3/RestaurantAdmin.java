@@ -43,7 +43,8 @@ public class RestaurantAdmin {
 
         while(notDone) {
             System.out.println("---------- Restaurant Management System ----------");
-            System.out.println("Hello, here are five options that you can choose from to try our super cool app!!!");
+            System.out.println("Hello, here are five options that you can choose from to try our super cool app!");
+            System.out.println("Each option would have some sub-options to select! Enjoy!");
             System.out.println("1 - Staff");
             System.out.println("2 - Customer");
             System.out.println("3 - Menu");
@@ -101,11 +102,11 @@ public class RestaurantAdmin {
         } else if (select == 4) {
             modifySalary();
         } else if (select == 5) {
-
+            modifySchedule();
         } else if (select == 6) {
-
+            modifyProficiency();
         } else if (select == 7) {
-
+            viewAllStaff();
         } else {
             System.out.println("Invalid selection.");
             return;
@@ -259,7 +260,145 @@ public class RestaurantAdmin {
      * @author Yingjie Xu
      */
     public static void modifySalary() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Modify salary -----");
+            System.out.println("Please enter the sid: ");
+            int sid = sc.nextInt();
+            sc.nextLine();
+            rs = statement.executeQuery("SELECT sid FROM staff WHERE sid = " + sid + ";");
+            if (rs.next()) {
+                System.out.println("New salary of the staff: ");
+                double salary = sc.nextDouble();
+                sc.nextLine();
+                int result = statement.executeUpdate("UPDATE staff SET salary = " + salary + " WHERE sid = " + sid + ";");
+                if (result == 1) {
+                    System.out.println("New salary set successfully.");
+                } else {
+                    System.out.println("Something went wrong.");
+                }
+            } else {
+                System.out.println("The sid doesn't exist.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
 
+    /**
+     * Modify the schedule of a given sid
+     * @author Yingjie Xu
+     */
+    public static void modifySchedule() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Modify schedule -----");
+            System.out.println("Please enter the sid: ");
+            int sid = sc.nextInt();
+            sc.nextLine();
+            rs = statement.executeQuery("SELECT sid FROM staff WHERE sid = " + sid + ";");
+            if (rs.next()) {
+                System.out.println("New schedule of the staff: ");
+                String time = sc.nextLine();
+                int result = statement.executeUpdate("UPDATE staff SET working_schdule = '" + time + "' WHERE sid = " + sid + ";");
+                if (result == 1) {
+                    System.out.println("New schedule set successfully.");
+                } else {
+                    System.out.println("Something went wrong.");
+                }
+            } else {
+                System.out.println("The sid doesn't exist.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    /**
+     * Modify the proficiency of a given sid
+     * @author Yingjie Xu
+     */
+    public static void modifyProficiency() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Modify Proficiency -----");
+            System.out.println("Please enter the sid: ");
+            int sid = sc.nextInt();
+            sc.nextLine();
+            rs = statement.executeQuery("SELECT sid FROM chef WHERE sid = " + sid + ";");
+            if (rs.next()) {
+                System.out.println("New Proficiency of the chef (1 - 5): ");
+                int proficiency = sc.nextInt();
+                sc.nextLine();
+                if (proficiency > 5 || proficiency < 0) {
+                    System.out.println("The proficiency is out of range.");
+                } else {
+                    int result = statement.executeUpdate("UPDATE chef SET proficiency = " + proficiency + " WHERE sid = " + sid + ";");
+                    if (result == 1) {
+                        System.out.println("New schedule set successfully.");
+                    } else {
+                        System.out.println("Something went wrong.");
+                    }
+                }
+            } else {
+                System.out.println("The sid doesn't exist or this sid is not a chef.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    /**
+     * View all the staff info
+     * @author Yingjie Xu
+     */
+    public static void viewAllStaff() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- View all staff -----");
+            rs = statement.executeQuery("SELECT sid, sname, working_schdule, salary FROM staff ORDER BY sid");
+            while (rs.next()) {
+                int sid = rs.getInt("sid");
+                String name = rs.getString("sname");
+                String schedule = rs.getString("working_schdule");
+                Double salary = rs.getDouble("salary");
+                System.out.println(name + " (sid: " + sid + ") works in the " + schedule + " and the salary is " + salary + " $/hr.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
     }
 
     /**
@@ -273,6 +412,7 @@ public class RestaurantAdmin {
         System.out.println("2 - Make a reservation");
         System.out.println("3 - Modify the address of a customer");
         System.out.println("4 - View the customer's info by phone number");
+        System.out.println("5 - View all the orders placed by a customer"); // maybe not?
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
@@ -282,6 +422,8 @@ public class RestaurantAdmin {
         } else if (select == 3) {
 
         } else if (select == 4) {
+
+        } else if (select == 5) {
 
         } else {
             System.out.println("Invalid selection.");
