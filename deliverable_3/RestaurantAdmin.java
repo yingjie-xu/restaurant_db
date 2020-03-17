@@ -751,7 +751,7 @@ public class RestaurantAdmin {
         } else if (select == 2) {
 
         } else if (select == 3) {
-       Connection con = null;
+            Connection con = null;
             Statement statement = null;
             ResultSet rs = null;
             try {
@@ -777,6 +777,12 @@ public class RestaurantAdmin {
                 try { con.close(); } catch (Exception e) { /* ignored */ }
             }
 
+        } else {
+            System.out.println("Invalid selection.");
+            return;
         }
     }
+
+
+
 }
