@@ -114,6 +114,20 @@ public class RestaurantAdmin {
             return;
         }
     }
+    
+    /**
+     * check if the input phone number is valid
+     * @param phone
+     * @return boolean
+     * @author Yingjie Xu
+     */
+    private static boolean validatePhone(String phone) {
+        boolean validate = phone.matches("\\d{3}-\\d{3}-\\d{4}\\w*\\s*");
+        if (!validate) {
+            System.out.println("Invalid phone number, please follow the format (xxx-xxx-xxxx)!");
+        }
+        return validate;
+    }
 
     /**
      * Helper method for addChef, addDeliveryGuy and addWaiter
