@@ -1,5 +1,7 @@
 # Deliverable 3 (Group 62)
 
+[TOC]
+
 ## Q1: Stored procedure
 
 ### Description: 
@@ -64,7 +66,7 @@ cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
 ```
 
 - Execution of the procedure (Nothing is returned because the return type is void)
-  - We want to train all the chef will proficiency less than or equal to 3
+  - We want to train all the chef with proficiency less than or equal to 3
 
 ```
 cs421=> SELECT FROM train_all_the_chef(3);
