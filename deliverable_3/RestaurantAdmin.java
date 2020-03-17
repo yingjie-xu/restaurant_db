@@ -698,13 +698,13 @@ public class RestaurantAdmin {
                 rs = statement.executeQuery("SELECT order_number FROM orders ORDER BY order_number DESC LIMIT 1");
                 rs.next();
                 String oid = rs.getString(1);
+                System.out.println(oid);
                 int ioid=Integer.parseInt(oid);
                 ioid++;
                 oid=String.format("%03d", ioid);
+                System.out.println(oid);
                 System.out.println("----- Info of Orders -----");
-                System.out.println("tips of orders: ");
-                double tips=sc.nextDouble() ;
-                sc.nextLine();
+                double tips=0.0 ;
                 int result1= statement.executeUpdate("INSERT INTO orders VALUES('" + oid + "'," + tips + ");");
                 if(result1==1){
                     System.out.println("New order added successfully.");
@@ -716,6 +716,7 @@ public class RestaurantAdmin {
                 if(validatePhone(phone_num)){
                     rs=statement.executeQuery("SELECT * FROM customer WHERE phone_number='" + phone_num + "';");
                 }else{
+                    int res=statement.executeUpdate("DELETE FROM orders WHERE order_number='"+oid+ "'");
                    return;
                 }
                 if(rs.next()){
