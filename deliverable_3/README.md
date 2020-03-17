@@ -28,7 +28,7 @@ BEGIN
     LOOP
         FETCH cur_chefs INTO rec_chef;
         EXIT WHEN NOT FOUND;
-		UPDATE chef SET proficiency = proficiency + 1 WHERE sid = rec_chef.sid;
+	UPDATE chef SET proficiency = proficiency + 1 WHERE sid = rec_chef.sid;
     END LOOP;
 	
     -- Close the cursor
