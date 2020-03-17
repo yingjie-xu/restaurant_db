@@ -566,14 +566,99 @@ public class RestaurantAdmin {
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
-
+            addDish();
         } else if (select == 2) {
-
+            modifyPrice();
         } else if (select == 3) {
-
+            viewAllDish();
         } else {
             System.out.println("Invalid selection.");
             return;
+        }
+    }
+
+    public static void addDish(){
+        Connection con = null;
+        Statement statement = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Info of Dish -----");
+            System.out.println("Name of the dish: ");
+            String dishName = sc.nextLine();
+            System.out.println("Price of the dish: ");
+            double price = sc.nextDouble();
+            int result = statement.executeUpdate("INSERT INTO customer VALUES('" + dishName + "','" + price
+                    + "','" + "');");
+            if (result == 1) {
+                System.out.println("New Customer added successfully.");
+            } else {
+                System.out.println("Something went wrong. New customer was not added.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    public static void modifyPrice(){
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        ResultSet price_d = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Modify Dish Price -----");
+            System.out.println("Please enter the Dish Name: ");
+            String dishName = sc.nextLine();
+            rs = statement.executeQuery("SELECT dish_name FROM dish WHERE dish_name = " + dishName + ";");
+            price_d = statement.executeQuery("SELECT price FROM dish WHERE dish_name = " + dishName + ";");
+            if (rs.next()) {
+                System.out.print("The old price is: ");
+                System.out.println(price_d);
+                System.out.println("New Price for that dish: ");
+                Double price = sc.nextDouble();
+                int result = statement.executeUpdate("UPDATE dish SET price = '" + price + "' WHERE dish_name = " + dishName + ";");
+                if (result == 1) {
+                    System.out.println("New price set successfully.");
+                } else {
+                    System.out.println("Something went wrong.");
+                }
+            } else {
+                System.out.println("The dish name doesn't exist.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    public static void viewAllDish(){
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- View all dishes -----");
+            rs = statement.executeQuery("SELECT dish_name, price FROM dish ORDER BY dish_name");
+            while (rs.next()) {
+                String dish_name = rs.getString("dish_name");
+                Double price = rs.getDouble("price");
+                System.out.println( " name: " + dish_name +"     $ " + price );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
         }
     }
 
