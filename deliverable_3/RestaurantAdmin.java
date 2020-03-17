@@ -749,7 +749,7 @@ public class RestaurantAdmin {
             }
 
         } else if (select == 2) {
-
+            delivery_order();
         } else if (select == 3) {
             Connection con = null;
             Statement statement = null;
@@ -780,6 +780,93 @@ public class RestaurantAdmin {
         } else {
             System.out.println("Invalid selection.");
             return;
+        }
+    }
+    
+    public static void delivery_order() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            //get next available oid
+            rs = statement.executeQuery("SELECT order_number FROM orders ORDER BY order_number DESC LIMIT 1");
+            rs.next();
+            String oid = rs.getString(1);
+            int ioid=Integer.parseInt(oid);
+            ioid++;
+            oid=Integer.toString(ioid);
+            //get next available delivery_guy(Pick a delivery guy with lowest workload)
+            rs = statement.executeQuery("SELECT sid, count(*) FROM delivery_orders GROUP BY sid ORDER BY sid LIMIT 1");
+            rs.next();
+            int sid = rs.getInt(1);
+            //info of orders
+            System.out.println("----- Info of Orders -----");
+            //Tips
+            System.out.println("Tips for the new order:");
+            double tips = sc.nextDouble();
+            sc.nextLine();
+            //insert one record to order table
+            int result = statement.executeUpdate("INSERT INTO orders VALUES('" + oid + "','" + tips + "');");
+            //platform
+            int count = 1;
+            System.out.println("Input the name of the platform: ");
+            rs = statement.executeQuery("SELECT pname FROM platform;");
+            while (rs.next()) {
+                String name = rs.getString("pname");
+                System.out.println("" + count + ". - " + name);
+                count++;
+            }
+            String pf = sc.nextLine();
+            //delivery fee
+            System.out.println("delivery_fee:");
+            float dFee = sc.nextFloat();
+            sc.nextLine();
+            //phone number
+            System.out.println("phone number of the customer: ");
+            String phone_num = sc.nextLine();
+            rs=statement.executeQuery("SELECT * FROM customer WHERE phone_number='" + phone_num + "';");
+
+            if(rs.next()){
+                result = statement.executeUpdate("INSERT INTO delivery_orders VALUES ('" + oid + "','" + phone_num+ "'," + sid +  ",'" + pf + "'," + dFee + ");");
+                if (result == 1) {
+                    System.out.println("New delivery_order added successfully.");
+                } else {
+                    System.out.println("Something went wrong. New delivery_order was not added.");
+                }
+            }else{
+                System.out.println("please input customer name");
+                String name=sc.nextLine() ;
+                System.out.println("please input customer address");
+                String address=sc.nextLine() ;
+                result=statement.executeUpdate("INSERT INTO customer VALUES('" + phone_num + "','" + name + "',' "+address+" ');");
+                if(result == 1){
+                    System.out.println("New customer added successfully");
+                }else{
+                    System.out.println("Something went wrong. New customer was not added");
+                }
+                result = statement.executeUpdate("INSERT INTO delivery_orders" +
+                        "VALUES ('" + oid + "','" + phone_num+ "'," + sid +  ",'" + pf + "'," + dFee + ");");
+                if (result == 1) {
+                    System.out.println("New delivery_order added successfully.");
+                } else {
+                    System.out.println("Something went wrong. New delivery_order was not added.");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+            } catch (Exception e) { /* ignored */ }
+            try {
+                statement.close();
+            } catch (Exception e) { /* ignored */ }
+            try {
+                con.close();
+            } catch (Exception e) { /* ignored */ }
         }
     }
 
