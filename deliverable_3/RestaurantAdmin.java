@@ -480,9 +480,7 @@ public class RestaurantAdmin {
                 statement = con.createStatement();
                 System.out.println("----- View order by oid -----");
                 System.out.println("Please enter the oid: ");
-                String oid = sc.nextLine();
-                System.out.println(oid);
-
+                String oid = sc.nextLine(); 
                 rs= statement.executeQuery("SELECT order_number,tips FROM orders WHERE order_number='" + oid + "';");
                 if( rs.next()) {
                     String ordernum = rs.getString("order_number");
