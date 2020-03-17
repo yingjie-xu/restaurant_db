@@ -472,6 +472,23 @@ public class RestaurantAdmin {
         } else if (select == 2) {
 
         } else if (select == 3) {
+            Connection con = null;
+            Statement statement = null;
+            ResultSet rs = null;
+            try {
+                con = DriverManager.getConnection(url, usernamestring, passwordstring);
+                statement = con.createStatement();
+                System.out.println("----- View order by oid -----");
+                System.out.println("Please enter the oid: ");
+                String oid = sc.nextLine();
+                //sc.nextLine();
+                rs = statement.executeQuery("SELECT order_number,tips FROM orders WHERE order_number=" + oid + ";");
+                String ordernum = rs.getString("order_number");
+                double tips = rs.getDouble("tips");
+                System.out.println(" the order with number " + ordernum + "has tips " + tips);
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         } else {
             System.out.println("Invalid selection.");
