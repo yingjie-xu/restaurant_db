@@ -689,7 +689,7 @@ public class RestaurantAdmin {
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
-            Connection con = null;
+             Connection con = null;
             Statement statement = null;
             ResultSet rs = null;
             try{
@@ -713,14 +713,18 @@ public class RestaurantAdmin {
                 }
                 System.out.println("phone number of the customer: ");
                 String phone_num = sc.nextLine();
-                rs=statement.executeQuery("SELECT * FROM customer WHERE phone_number='" + phone_num + "';");
-
+                if(validatePhone(phone_num)){
+                    rs=statement.executeQuery("SELECT * FROM customer WHERE phone_number='" + phone_num + "';");
+                }else{
+                   return;
+                }
                 if(rs.next()){
                     int result = statement.executeUpdate("INSERT INTO dine_in_orders VALUES('" + oid + "','" + phone_num + "');");
                     if (result == 1) {
                         System.out.println("New dine_in_order added successfully.");
                     } else {
                         System.out.println("Something went wrong. New dine_in_order was not added.");
+                        SQLException e;
                     }
                 }else{
                    System.out.println("please input customer name");
@@ -743,10 +747,11 @@ public class RestaurantAdmin {
                 try { statement.close(); } catch (Exception e) { /* ignored */ }
                 try { con.close(); } catch (Exception e) { /* ignored */ }
             }
+
         } else if (select == 2) {
 
         } else if (select == 3) {
-        Connection con = null;
+       Connection con = null;
             Statement statement = null;
             ResultSet rs = null;
             try {
@@ -754,22 +759,24 @@ public class RestaurantAdmin {
                 statement = con.createStatement();
                 System.out.println("----- View order by oid -----");
                 System.out.println("Please enter the oid: ");
-                String oid = sc.nextLine(); 
-                rs= statement.executeQuery("SELECT order_number,tips FROM orders WHERE order_number='" + oid + "';");
-                if( rs.next()) {
+                String oid = sc.nextLine();
+                rs = statement.executeQuery("SELECT order_number,tips FROM orders WHERE order_number='" + oid + "';");
+                if (rs.next()) {
                     String ordernum = rs.getString("order_number");
                     double tips = rs.getDouble("tips");
                     System.out.println(" the order with number " + ordernum + " has tips " + tips);
-                }else{
+                } else {
                     System.out.println("Something went wrong.");
                 }
-            }catch (SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
+            finally{
+                try { rs.close(); } catch (Exception e) { /* ignored */ }
+                try { statement.close(); } catch (Exception e) { /* ignored */ }
+                try { con.close(); } catch (Exception e) { /* ignored */ }
+            }
 
-        } else {
-            System.out.println("Invalid selection.");
-            return;
         }
     }
 }
