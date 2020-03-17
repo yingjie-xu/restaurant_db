@@ -472,7 +472,7 @@ public class RestaurantAdmin {
         } else if (select == 2) {
 
         } else if (select == 3) {
-            Connection con = null;
+        Connection con = null;
             Statement statement = null;
             ResultSet rs = null;
             try {
@@ -481,11 +481,16 @@ public class RestaurantAdmin {
                 System.out.println("----- View order by oid -----");
                 System.out.println("Please enter the oid: ");
                 String oid = sc.nextLine();
-                //sc.nextLine();
-                rs = statement.executeQuery("SELECT order_number,tips FROM orders WHERE order_number=" + oid + ";");
-                String ordernum = rs.getString("order_number");
-                double tips = rs.getDouble("tips");
-                System.out.println(" the order with number " + ordernum + "has tips " + tips);
+                System.out.println(oid);
+
+                rs= statement.executeQuery("SELECT order_number,tips FROM orders WHERE order_number='" + oid + "';");
+                if( rs.next()) {
+                    String ordernum = rs.getString("order_number");
+                    double tips = rs.getDouble("tips");
+                    System.out.println(" the order with number " + ordernum + " has tips " + tips);
+                }else{
+                    System.out.println("Something went wrong.");
+                }
             }catch (SQLException e) {
                 e.printStackTrace();
             }
