@@ -675,6 +675,36 @@ public class RestaurantAdmin {
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
+             Connection con = null;
+            Statement statement = null;
+            ResultSet rs = null;
+            try{
+                con = DriverManager.getConnection(url, usernamestring, passwordstring);
+                statement = con.createStatement();
+                rs = statement.executeQuery("SELECT order_number FROM orders ORDER BY order_number DESC LIMIT 1");
+                rs.next();
+                String oid = rs.getString(1);
+                int ioid=Integer.parseInt(oid);
+                ioid++;
+                oid=Integer.toString(ioid);
+                System.out.println("----- Info of Orders -----");
+                System.out.println("phone number of the customer: ");
+                String phone_num = sc.nextLine();
+                int result = statement.executeUpdate("INSERT INTO orders VALUES('" + oid + "','" + phone_num + "');");
+                if (result == 1) {
+                    System.out.println("New order added successfully.");
+                } else {
+                    System.out.println("Something went wrong. New order was not added.");
+                }
+                //return oid;
+
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }finally{
+                try { rs.close(); } catch (Exception e) { /* ignored */ }
+                try { statement.close(); } catch (Exception e) { /* ignored */ }
+                try { con.close(); } catch (Exception e) { /* ignored */ }
+            }
 
         } else if (select == 2) {
 
