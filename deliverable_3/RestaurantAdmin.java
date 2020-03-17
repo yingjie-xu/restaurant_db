@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -398,7 +400,7 @@ public class RestaurantAdmin {
             try { rs.close(); } catch (Exception e) { /* ignored */ }
             try { statement.close(); } catch (Exception e) { /* ignored */ }
             try { con.close(); } catch (Exception e) { /* ignored */ }
-        }
+}
     }
 
     /**
@@ -411,18 +413,18 @@ public class RestaurantAdmin {
         System.out.println("1 - Add a customer");
         System.out.println("2 - Make a reservation");
         System.out.println("3 - Modify the address of a customer");
-        System.out.println("4 - View the customer's info by phone number");
+        System.out.println("4 - View all the customers' info");
         System.out.println("5 - View all the orders placed by a customer"); // maybe not?
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
-
+            addCustomer();
         } else if (select == 2) {
-
+            makeReservation();
         } else if (select == 3) {
-
+            modifyAddress();
         } else if (select == 4) {
-
+            viewCustomerInfo();
         } else if (select == 5) {
 
         } else {
@@ -430,6 +432,126 @@ public class RestaurantAdmin {
             return;
         }
     }
+
+    public static void addCustomer() {
+        Connection con = null;
+        Statement statement = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Info of Customer -----");
+            System.out.println("Phone number of the customer xxx-xxx-xxxx");
+            String phoneNumber = sc.nextLine();
+            System.out.println("Name of the customer: ");
+            String cname = sc.nextLine();
+            System.out.println("address of the customer: ");
+            String address = sc.nextLine();
+            int result = statement.executeUpdate("INSERT INTO customer VALUES('" + phoneNumber + "','" + cname
+                    + "','" + address + "');");
+                if (result == 1) {
+                System.out.println("New Customer added successfully.");
+            } else {
+                System.out.println("Something went wrong. New customer was not added.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    public static void makeReservation(){
+        // HOW TO STORE DATE DATA TYPE
+        Connection con = null;
+        Statement statement = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Info of Reservation -----");
+            String pattern = "MM-dd-yyyy";
+            System.out.println("Date of the reservation("+ pattern + ")");
+            String date = sc.nextLine();
+            System.out.println("Phone number of the customer xxx-xxx-xxxx");
+            String phoneNumber = sc.nextLine();
+            System.out.println("time slot reserved by customer xx:xx:xx");
+            String timeSlot = sc.nextLine();
+            int result = statement.executeUpdate("INSERT INTO reservation VALUES('" + date + "','" + phoneNumber
+                    + "','" + timeSlot + "');");
+            if (result == 1) {
+
+                System.out.println("New reservation added successfully.");
+            } else {
+                System.out.println("Something went wrong. New reservation was not added.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    public static void modifyAddress(){
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        ResultSet addr = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Modify Address -----");
+            System.out.println("Please enter the phone number: ");
+            String phoneNumber = sc.nextLine();
+            rs = statement.executeQuery("SELECT phone_number FROM customer WHERE phone_number = " + phoneNumber + ";");
+            addr = statement.executeQuery("SELECT address FROM customer WHERE phone_number = " + phoneNumber + ";");
+            if (rs.next()) {
+                System.out.print("The old address is: ");
+                System.out.println(addr);
+                System.out.println("New address of the customer ");
+                String address = sc.nextLine();
+                int result = statement.executeUpdate("UPDATE customer SET address = '" + address + "' WHERE phone_number = " + phoneNumber + ";");
+                if (result == 1) {
+                    System.out.println("New address set successfully.");
+                } else {
+                    System.out.println("Something went wrong.");
+                }
+            } else {
+                System.out.println("The phone_number doesn't exist.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    public static void viewCustomerInfo() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- View all customer -----");
+            rs = statement.executeQuery("SELECT phone_number, canme, address FROM customer ORDER BY canme");
+            while (rs.next()) {
+                String phone_number = rs.getString("phone_number");
+                String name = rs.getString("canme");
+                String address = rs.getString("address");
+                System.out.println(name + " (phone_number: " + phone_number +") name: " + name + " address: " + address);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
 
     /**
      * All possible methods for the admin to modify the menu
