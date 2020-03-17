@@ -675,7 +675,7 @@ public class RestaurantAdmin {
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
-             Connection con = null;
+            Connection con = null;
             Statement statement = null;
             ResultSet rs = null;
             try{
@@ -686,17 +686,41 @@ public class RestaurantAdmin {
                 String oid = rs.getString(1);
                 int ioid=Integer.parseInt(oid);
                 ioid++;
-                oid=Integer.toString(ioid);
+                oid=String.format("%03d", ioid);
                 System.out.println("----- Info of Orders -----");
-                System.out.println("phone number of the customer: ");
-                String phone_num = sc.nextLine();
-                int result = statement.executeUpdate("INSERT INTO orders VALUES('" + oid + "','" + phone_num + "');");
-                if (result == 1) {
+                System.out.println("tips of orders: ");
+                double tips=sc.nextDouble() ;
+                sc.nextLine();
+                int result1= statement.executeUpdate("INSERT INTO orders VALUES('" + oid + "'," + tips + ");");
+                if(result1==1){
                     System.out.println("New order added successfully.");
-                } else {
+                }else{
                     System.out.println("Something went wrong. New order was not added.");
                 }
-                //return oid;
+                System.out.println("phone number of the customer: ");
+                String phone_num = sc.nextLine();
+                rs=statement.executeQuery("SELECT * FROM customer WHERE phone_number='" + phone_num + "';");
+
+                if(rs.next()){
+                    int result = statement.executeUpdate("INSERT INTO dine_in_orders VALUES('" + oid + "','" + phone_num + "');");
+                    if (result == 1) {
+                        System.out.println("New dine_in_order added successfully.");
+                    } else {
+                        System.out.println("Something went wrong. New dine_in_order was not added.");
+                    }
+                }else{
+                   System.out.println("please input customer name");
+                   String name=sc.nextLine() ;
+                    System.out.println("please input customer address");
+                    String address=sc.nextLine() ;
+                   int result3=statement.executeUpdate("INSERT INTO customer VALUES('" + phone_num + "','" + name + "',' "+address+" ');");
+                   int result = statement.executeUpdate("INSERT INTO dine_in_orders VALUES('" + oid + "','" + phone_num + "');");
+                    if (result == 1) {
+                        System.out.println("New dine_in_order added successfully.");
+                    } else {
+                        System.out.println("Something went wrong. New dine_in_order was not added.");
+                    }
+                }
 
             }catch (SQLException e) {
                 e.printStackTrace();
@@ -705,7 +729,6 @@ public class RestaurantAdmin {
                 try { statement.close(); } catch (Exception e) { /* ignored */ }
                 try { con.close(); } catch (Exception e) { /* ignored */ }
             }
-
         } else if (select == 2) {
 
         } else if (select == 3) {
