@@ -8,6 +8,8 @@
 
 This function (Procedure) will train all the chef (i.e. increase the proficiency of the chef by one) below the function input `max_proficiency`. The function will take one input which is `max_proficiency`. All the chef with proficiency less than or equal to this `max_proficiency` will be trained. 
 
+> Handling constraints: Since the proficiency of the chef is between 0 and 5, if the input `max_proficiency` is out of this range, no chef will be trained (i.e. the database remains unchanged)
+
 ### Procedure:
 
 ```sql
@@ -48,25 +50,25 @@ WHERE sid = 13
 SELECT FROM train_all_the_chef(3)
 ```
 
-### Testing (sample execution)
+### Example (Test with valid input)
 
 - Query before execution
+  - We want to train all the chef with proficiency less than or equal to 3
 
 ```
 cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
  sid | proficiency
 -----+-------------
-  13 |           2    <-- will be trained
-  14 |           3    <-- will be trained
-  15 |           3    <-- will be trained
-  16 |           3    <-- will be trained
+  13 |           2
+  14 |           3
+  15 |           3
+  16 |           3
   17 |           4
   18 |           5
 (6 rows)
 ```
 
 - Execution of the procedure (Nothing is returned because the return type is void)
-  - We want to train all the chef with proficiency less than or equal to 3
 
 ```
 cs421=> SELECT FROM train_all_the_chef(3);
@@ -89,3 +91,46 @@ cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
 (6 rows)
 ```
 
+### Example (Test with invalid input)
+
+- Query before execution
+  - We want to train all the chef with proficiency less than or equal to 6 (which is not a valid execution)
+  - The expectation is that the table remains **unchanged**
+
+```
+cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
+ sid | proficiency
+-----+-------------
+  13 |           2    <-- stay the same
+  14 |           3    <-- stay the same
+  15 |           3    <-- stay the same
+  16 |           3    <-- stay the same
+  17 |           4    <-- stay the same
+  18 |           5    <-- stay the same
+(6 rows)
+```
+
+- Execution of the procedure (Nothing is returned because the return type is void)
+
+```
+cs421=> SELECT FROM train_all_the_chef(6);
+--
+(1 row)
+```
+
+- Query after execution
+
+```
+cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
+ sid | proficiency
+-----+-------------
+  13 |           2    <-- stay the same
+  14 |           3    <-- stay the same
+  15 |           3    <-- stay the same
+  16 |           3    <-- stay the same
+  17 |           4    <-- stay the same
+  18 |           5    <-- stay the same
+(6 rows)
+```
+
+### 
