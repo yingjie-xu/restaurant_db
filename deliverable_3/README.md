@@ -1,5 +1,7 @@
 # Deliverable 3 (Group 62)
 
+> Members: Weiming Guo, Hengxian Jiang, Yingjie Xu, Helen Ren
+
 [TOC]
 
 ## Q1: Stored procedure
@@ -130,11 +132,97 @@ cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
 
 
 
+## Q2: Application (JDBC program)
+
+A video demo is recorded for this part. The java code named `RestaurantAdmin.java` for this application is also uploaded.
+
+
+
+---
+
+
+
+## Q3: Indexing
+
+### a. Indexing on dish price
+
+- Description & why this helps: 
+
+We build the clustered index on `price` for dish relation because it sort on the price of the dishes. This will help execute SELECT statements based on price of dishes faster (specifically when we use the price range as our SELECT condition) as the matching tuples will only be clustered on a few data pages. 
+
+- SQL statements:
+
+```
+cs421=> CREATE INDEX Iprice ON dish(price);
+CREATE INDEX
+cs421=> CLUSTER dish USING Iprice;
+CLUSTER
+```
+
+- example query benefited from indexing:
+
+```
+cs421=> SELECT * FROM dish WHERE price < 50;
+              dish_name              | price 
+-------------------------------------+-------
+ Sautéed Dark Beer Pork              |  28.9
+ Breaded Cucumber & Lime Pizza       |  19.9
+ Roasted Almonds & Avocado Bread     |  28.9
+ Rum and Praline Delight             |  17.9
+ Chestnut and Nutmeg Gingerbread     |  25.9
+ Ginger Candy                        |  5.99
+ Cranberry Genoise                   |    27
+ Fire-Roasted Basil & Mint Yak       |  32.3
+ Simmered Mountain Rabbit            |  22.5
+ Pressure-Fried Vegetables & Frog    |  31.5
+ Sautéed Orange & Mustard Vegetables |  26.9
+ Barbecued Mustard & Garlic Calzone  |    25
+ boiled spicy fish                   | 30.99
+ Guoyou pork                         | 17.99
+ Sweet and sour pork ribs            |  14.5
+ beef pho                            |  10.5
+ General Tsos Chicken                |  15.5
+ Coconut chicken                     | 19.99
+(18 rows)
+```
+
+### b. Indexing on reservation time slot
+
+- Description & why this helps: 
+
+We build index on `timeslot` for reservation relation because it will help when the the user want to find a specific time slot such as noon reservations or evening reservations. In this way, we could get better performance by using indexing. We do not need to scan through the whole table to find the corresponding timeslot.
+
+- SQL statements:
+
+```
+cs421=> CREATE INDEX Itimeslot ON reservation(timeslot);
+CREATE INDEX
+```
+
+- example query benefited from indexing:
+
+```
+cs421=> SELECT * FROM reservation WHERE timeslot = '12:20:00';
+   rdate    | phone_number | timeslot 
+------------+--------------+----------
+ 2020-01-25 | 514-421-1768 | 12:20:00
+ 2020-10-22 | 143-222-2222 | 12:20:00
+(2 rows)
+```
+
+
+
+---
+
+
+
 ## Q4: Visualization
 
 We used Jupyter Notebook for this part of the deliverable. The matplotlib library in Python is used to plot the bar chart.
 
-[View our code and result graph on Google CoLab.](https://colab.research.google.com/drive/1N3ck6t2Ib-MlFnOCvvYOw3uwPriWEtpU)
+[View our code and result graph on Google CoLab.](https://colab.research.google.com/drive/1N3ck6t2Ib-MlFnOCvvYOw3uwPriWEtpU) 
+
+The `visualization.ipynb` file is uploaded. Required csv files for this part are `dish.csv` and `staff.csv`. The result images are `avg_salary.png` and `dish.png`.
 
 ### Visualization 1: Number of dishes in different price range
 
@@ -299,3 +387,15 @@ plt.show()
 - result image:
 
 ![dish](./visualization/avg_salary.png)
+
+
+
+---
+
+
+
+## Q5: Creativity Point (visualization in Q4)
+
+We explored the visualization on our own application. We used a library called matplotlib in Python to do the visualization of our data. 
+
+[View our code and result graph on Google CoLab.](https://colab.research.google.com/drive/1N3ck6t2Ib-MlFnOCvvYOw3uwPriWEtpU) The .ipynb file is also uploaded.
