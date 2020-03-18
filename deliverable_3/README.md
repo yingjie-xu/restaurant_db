@@ -133,4 +133,11 @@ cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
 (6 rows)
 ```
 
-### 
+
+
+## Q4: Visualization
+
+We used Jupyter Notebook for this part of the deliverable.
+
+[View our code and result graph on Google CoLab.](https://colab.research.google.com/drive/1N3ck6t2Ib-MlFnOCvvYOw3uwPriWEtpU)
+
