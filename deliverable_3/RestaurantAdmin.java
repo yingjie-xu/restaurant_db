@@ -698,11 +698,9 @@ public class RestaurantAdmin {
                 rs = statement.executeQuery("SELECT order_number FROM orders ORDER BY order_number DESC LIMIT 1");
                 rs.next();
                 String oid = rs.getString(1);
-                System.out.println(oid);
                 int ioid=Integer.parseInt(oid);
                 ioid++;
                 oid=String.format("%03d", ioid);
-                System.out.println(oid);
                 System.out.println("----- Info of Orders -----");
                 double tips=0.0 ;
                 int result1= statement.executeUpdate("INSERT INTO orders VALUES('" + oid + "'," + tips + ");");
