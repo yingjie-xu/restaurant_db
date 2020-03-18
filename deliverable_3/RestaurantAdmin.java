@@ -465,6 +465,9 @@ public class RestaurantAdmin {
             System.out.println("----- Info of Customer -----");
             System.out.println("Phone number of the customer xxx-xxx-xxxx");
             String phoneNumber = sc.nextLine();
+            if(!validatePhone(phoneNumber)){
+                return;
+            }
             System.out.println("Name of the customer: ");
             String cname = sc.nextLine();
             System.out.println("address of the customer: ");
@@ -496,6 +499,9 @@ public class RestaurantAdmin {
             String date = sc.nextLine();
             System.out.println("Phone number of the customer xxx-xxx-xxxx");
             String phoneNumber = sc.nextLine();
+            if(!validatePhone(phoneNumber)){
+                return;
+            }
             System.out.println("time slot reserved by customer xx:xx:xx");
             String timeSlot = sc.nextLine();
             int result = statement.executeUpdate("INSERT INTO reservation VALUES('" + date + "','" + phoneNumber
@@ -524,6 +530,9 @@ public class RestaurantAdmin {
             System.out.println("----- Modify Address -----");
             System.out.println("Please enter the phone number of the customer: ");
             String phoneNumber = sc.nextLine();
+            if(!validatePhone(phoneNumber)){
+                return;
+            }
             char singleQuote = '\'';
             rs = statement.executeQuery("SELECT phone_number FROM customer WHERE phone_number = " + singleQuote + phoneNumber + singleQuote + ";");
             if (rs.next()) {
@@ -579,6 +588,9 @@ public class RestaurantAdmin {
             statement = con.createStatement();
             System.out.println("Please enter customer's phone number");
             String phone_number = sc.nextLine();
+            if(!validatePhone(phone_number)){
+                return;
+            }
             char singleQuote = '\'';
             System.out.println("----- View All Dine-in Orders -----");
             rs = statement.executeQuery("SELECT D.order_number FROM customer C, dine_in_orders D " +
@@ -606,6 +618,9 @@ public class RestaurantAdmin {
             statement = con.createStatement();
             System.out.println("Please enter customer's phone number");
             String phone_number = sc.nextLine();
+            if(!validatePhone(phone_number)){
+                return;
+            }
             char singleQuote = '\'';
             System.out.println("----- View All Delivery-in Orders -----");
             rs = statement.executeQuery("SELECT D.order_number FROM customer C, delivery_orders D " +
