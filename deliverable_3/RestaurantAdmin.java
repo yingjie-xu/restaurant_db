@@ -428,7 +428,7 @@ public class RestaurantAdmin {
         System.out.println("2 - Make a reservation");
         System.out.println("3 - Modify the address of a customer");
         System.out.println("4 - View all the customers' info");
-        System.out.println("5 - View all the orders placed by a customer"); // maybe not?
+        System.out.println("5 - View all the orders placed by a customer");
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
@@ -440,7 +440,16 @@ public class RestaurantAdmin {
         } else if (select == 4) {
             viewCustomerInfo();
         } else if (select == 5) {
-
+            System.out.println("Please choose the order type: 1.Dine-in 2.Delivery");
+            int choose = sc.nextInt();
+            if(choose == 1){
+                sc.nextLine();
+                viewDineInOrdersByACustomer();
+            }
+            if(choose == 2){
+                sc.nextLine();
+                viewDeliveryOrdersByACustomer();
+            }
         } else {
             System.out.println("Invalid selection.");
             return;
@@ -476,7 +485,6 @@ public class RestaurantAdmin {
     }
 
     public static void makeReservation(){
-        // HOW TO STORE DATE DATA TYPE
         Connection con = null;
         Statement statement = null;
         try {
@@ -510,21 +518,18 @@ public class RestaurantAdmin {
         Connection con = null;
         Statement statement = null;
         ResultSet rs = null;
-        ResultSet addr = null;
         try {
             con = DriverManager.getConnection(url, usernamestring, passwordstring);
             statement = con.createStatement();
             System.out.println("----- Modify Address -----");
-            System.out.println("Please enter the phone number: ");
+            System.out.println("Please enter the phone number of the customer: ");
             String phoneNumber = sc.nextLine();
-            rs = statement.executeQuery("SELECT phone_number FROM customer WHERE phone_number = " + phoneNumber + ";");
-            addr = statement.executeQuery("SELECT address FROM customer WHERE phone_number = " + phoneNumber + ";");
+            char singleQuote = '\'';
+            rs = statement.executeQuery("SELECT phone_number FROM customer WHERE phone_number = " + singleQuote + phoneNumber + singleQuote + ";");
             if (rs.next()) {
-                System.out.print("The old address is: ");
-                System.out.println(addr);
                 System.out.println("New address of the customer ");
                 String address = sc.nextLine();
-                int result = statement.executeUpdate("UPDATE customer SET address = '" + address + "' WHERE phone_number = " + phoneNumber + ";");
+                int result = statement.executeUpdate("UPDATE customer SET address ="  + singleQuote + address + singleQuote +  "WHERE phone_number = " + singleQuote+ phoneNumber + singleQuote+ ";");
                 if (result == 1) {
                     System.out.println("New address set successfully.");
                 } else {
@@ -556,6 +561,59 @@ public class RestaurantAdmin {
                 String name = rs.getString("canme");
                 String address = rs.getString("address");
                 System.out.println(name + " (phone_number: " + phone_number +") name: " + name + " address: " + address);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+    public static void viewDineInOrdersByACustomer(){
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("Please enter customer's phone number");
+            String phone_number = sc.nextLine();
+            char singleQuote = '\'';
+            System.out.println("----- View All Dine-in Orders -----");
+            rs = statement.executeQuery("SELECT D.order_number FROM customer C, dine_in_orders D " +
+                    "WHERE C.phone_number = D.phone_number AND C.phone_number =" + singleQuote + phone_number + singleQuote + ";");
+            System.out.println("phoneNumber: " + phone_number);
+            while (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                System.out.println((orderNumber));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
+
+    public static void viewDeliveryOrdersByACustomer(){
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("Please enter customer's phone number");
+            String phone_number = sc.nextLine();
+            char singleQuote = '\'';
+            System.out.println("----- View All Delivery-in Orders -----");
+            rs = statement.executeQuery("SELECT D.order_number FROM customer C, delivery_orders D " +
+                    "WHERE C.phone_number = D.phone_number AND C.phone_number =" + singleQuote + phone_number + singleQuote + ";");
+            System.out.println("phoneNumber: " + phone_number);
+            while (rs.next()) {
+                int orderNumber = rs.getInt("order_number");
+                System.out.println((orderNumber));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -602,8 +660,8 @@ public class RestaurantAdmin {
             String dishName = sc.nextLine();
             System.out.println("Price of the dish: ");
             double price = sc.nextDouble();
-            int result = statement.executeUpdate("INSERT INTO customer VALUES('" + dishName + "','" + price
-                    + "','" + "');");
+            int result = statement.executeUpdate("INSERT INTO dish VALUES('" + dishName + "','" + price
+                    + "');");
             if (result == 1) {
                 System.out.println("New Customer added successfully.");
             } else {
@@ -628,14 +686,13 @@ public class RestaurantAdmin {
             System.out.println("----- Modify Dish Price -----");
             System.out.println("Please enter the Dish Name: ");
             String dishName = sc.nextLine();
-            rs = statement.executeQuery("SELECT dish_name FROM dish WHERE dish_name = " + dishName + ";");
-            price_d = statement.executeQuery("SELECT price FROM dish WHERE dish_name = " + dishName + ";");
+            char singleQuote = '\'';
+            rs = statement.executeQuery("SELECT dish_name FROM dish WHERE dish_name =" +singleQuote+  dishName  +singleQuote+  ";");
+
             if (rs.next()) {
-                System.out.print("The old price is: ");
-                System.out.println(price_d);
                 System.out.println("New Price for that dish: ");
                 Double price = sc.nextDouble();
-                int result = statement.executeUpdate("UPDATE dish SET price = '" + price + "' WHERE dish_name = " + dishName + ";");
+                int result = statement.executeUpdate("UPDATE dish SET price = '" + price + "' WHERE dish_name = " + singleQuote+ dishName + singleQuote + ";");
                 if (result == 1) {
                     System.out.println("New price set successfully.");
                 } else {
@@ -675,6 +732,7 @@ public class RestaurantAdmin {
             try { con.close(); } catch (Exception e) { /* ignored */ }
         }
     }
+
 
     /**
      * All possible methods for the admin to modify the order
