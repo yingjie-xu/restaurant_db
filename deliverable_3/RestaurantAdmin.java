@@ -759,6 +759,7 @@ public class RestaurantAdmin {
         System.out.println("1 - Place a dine-in order");
         System.out.println("2 - Place a delivery order");
         System.out.println("3 - View order by oid");
+        System.out.println("4 - Add tips to order");
         int select = sc.nextInt();
         sc.nextLine();
         if (select == 1) {
@@ -849,7 +850,10 @@ public class RestaurantAdmin {
                 try { con.close(); } catch (Exception e) { /* ignored */ }
             }
 
-        } else {
+        } else if(select == 4){
+            add_tips();    
+        }
+        else {
             System.out.println("Invalid selection.");
             return;
         }
@@ -868,7 +872,7 @@ public class RestaurantAdmin {
             String oid = rs.getString(1);
             int ioid=Integer.parseInt(oid);
             ioid++;
-            oid=Integer.toString(ioid);
+            oid=String.format("%03d", ioid);
             //get next available delivery_guy(Pick a delivery guy with lowest workload)
             rs = statement.executeQuery("SELECT sid, count(*) FROM delivery_orders GROUP BY sid ORDER BY sid LIMIT 1");
             rs.next();
@@ -877,8 +881,7 @@ public class RestaurantAdmin {
             System.out.println("----- Info of Orders -----");
             //Tips
             System.out.println("Tips for the new order:");
-            double tips = sc.nextDouble();
-            sc.nextLine();
+            double tips=0.0 ;
             //insert one record to order table
             int result = statement.executeUpdate("INSERT INTO orders VALUES('" + oid + "','" + tips + "');");
             //platform
@@ -942,6 +945,36 @@ public class RestaurantAdmin {
         }
     }
 
-
-
+     public static void add_tips() {
+        Connection con = null;
+        Statement statement = null;
+        ResultSet rs = null;
+        try {
+            con = DriverManager.getConnection(url, usernamestring, passwordstring);
+            statement = con.createStatement();
+            System.out.println("----- Add tips -----");
+            System.out.println("Please enter the oid: ");
+            String oid = sc.nextLine();
+            rs = statement.executeQuery("SELECT order_number FROM orders WHERE order_number='" + oid + "';");
+            if (rs.next()) {
+                System.out.println("The amount of tips:");
+                double tips = sc.nextDouble();
+                int result = statement.executeUpdate("UPDATE orders SET tips = " + tips + " WHERE order_number = '" + oid + "';");
+                if(result == 1){
+                    System.out.println("Tips are added successfully!");
+                }else{
+                    System.out.println("Something went wrong. Tips were not added.");
+                }
+            } else {
+                System.out.println("Something went wrong. Order not found!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally{
+            try { rs.close(); } catch (Exception e) { /* ignored */ }
+            try { statement.close(); } catch (Exception e) { /* ignored */ }
+            try { con.close(); } catch (Exception e) { /* ignored */ }
+        }
+    }
 }
