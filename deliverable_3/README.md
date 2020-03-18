@@ -39,15 +39,6 @@ BEGIN
     CLOSE cur_chefs;
 END;
 $$ LANGUAGE plpgsql;
-
-
-SELECT sid, proficiency FROM chef 
-
-UPDATE chef 
-SET proficiency = 2
-WHERE sid = 13
-
-SELECT FROM train_all_the_chef(3)
 ```
 
 ### Example (Test with valid input)
