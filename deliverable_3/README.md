@@ -134,7 +134,9 @@ cs421=> SELECT sid, proficiency FROM chef ORDER BY sid;
 
 ## Q2: Application (JDBC program)
 
-A video demo is recorded for this part. The java code named `RestaurantAdmin.java` for this application is also uploaded.
+A video demo is recorded for this part. The java code named `RestaurantAdmin.java` for this application is also uploaded. [View the video demo here](https://www.youtube.com/watch?v=3Q-t3AGryoo)
+
+https://www.youtube.com/watch?v=3Q-t3AGryoo
 
 
 
