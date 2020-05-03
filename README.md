@@ -2,7 +2,7 @@
 
 This **Restaurant Management System** will store the information and constraints required to efficiently manage a restaurant system. This system could store two kinds of orders from customers and distribute staff with different responsibilities. 
 
-## :rocket: ​Project Reports
+## Project Reports
 
 | Deliverable                                                  | Content                                                      |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -20,7 +20,7 @@ Here is one example visualization image:
 
 Read our deliverable reports for more information.
 
-## :runner: Group Members
+## Group Members
 
 | Name                                            |
 | ----------------------------------------------- |
@@ -29,7 +29,7 @@ Read our deliverable reports for more information.
 | [Yingjie Xu](https://github.com/yingjie-xu)     |
 | [Helen Ren](https://github.com/Helen-Ren-hub)   |
 
-## :triangular_flag_on_post: Notice
+## Notice
 
 ```
 Please do not copy any code from this repository for academic purposes.
